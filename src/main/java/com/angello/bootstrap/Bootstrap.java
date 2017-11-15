@@ -1,7 +1,9 @@
 package com.angello.bootstrap;
 
 import com.angello.domain.Category;
+import com.angello.domain.Customer;
 import com.angello.repositories.CategoryRepository;
+import com.angello.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +14,51 @@ import org.springframework.stereotype.Component;
 public class Bootstrap implements CommandLineRunner{
 
     private CategoryRepository categoryRepository;
+    private CustomerRepository customerRepository;
 
-    public Bootstrap(CategoryRepository categoryRepository) {
+    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
         this.categoryRepository = categoryRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+
+        loadCategories();
+        loadCustomers();
+    }
+
+    private void loadCustomers() {
+        Customer joe = new Customer();
+        joe.setFirstName("Joe");
+        joe.setLastName("Newman");
+
+        Customer michael = new Customer();
+        michael.setFirstName("Michael");
+        michael.setLastName("Lachappele");
+
+        Customer david = new Customer();
+        david.setFirstName("David");
+        david.setLastName("Winter");
+
+        Customer anne = new Customer();
+        anne.setFirstName("Anne");
+        anne.setLastName("Hine");
+
+        Customer alice = new Customer();
+        alice.setFirstName("Alice");
+        alice.setLastName("Eastman");
+
+        customerRepository.save(joe);
+        customerRepository.save(michael);
+        customerRepository.save(david);
+        customerRepository.save(anne);
+        customerRepository.save(alice);
+
+        System.out.println("Data Loaded customers = " + customerRepository.count() );
+    }
+
+    private void loadCategories() {
         Category fruits = new Category();
         fruits.setName("Fruits");
 
@@ -41,7 +81,6 @@ public class Bootstrap implements CommandLineRunner{
         categoryRepository.save(nuts);
 
 
-        System.out.println("Data Loaded = " + categoryRepository.count() );
-
+        System.out.println("Data Loaded categories = " + categoryRepository.count() );
     }
 }
