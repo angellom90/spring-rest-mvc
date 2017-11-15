@@ -3,6 +3,7 @@ package com.angello.services;
 import com.angello.api.v1.mapper.CategoryMapper;
 import com.angello.api.v1.model.CategoryDTO;
 import com.angello.repositories.CategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by jt on 9/26/17.
  */
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
