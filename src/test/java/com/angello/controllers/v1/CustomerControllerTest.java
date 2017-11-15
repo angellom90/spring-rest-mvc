@@ -1,8 +1,6 @@
 package com.angello.controllers.v1;
 
-import com.angello.api.v1.model.CategoryDTO;
 import com.angello.api.v1.model.CustomerDTO;
-import com.angello.domain.Customer;
 import com.angello.services.CustomerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,10 +21,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CustomerControllerTest {
+public class CustomerControllerTest extends AbstractRestControllerTest{
 
     public static final String FIRST_NAME = "Freddy";
     public static final String LAST_NAME = "Meyers";
@@ -51,12 +50,12 @@ public class CustomerControllerTest {
     public void getAllCustomers() throws Exception {
 
         CustomerDTO customer = new CustomerDTO();
-        customer.setId(1L);
+        //customer.setId(1L);
         customer.setFirstName(FIRST_NAME);
         customer.setLastName(LAST_NAME);
 
         CustomerDTO customer2 = new CustomerDTO();
-        customer2.setId(2L);
+        //customer2.setId(2L);
         customer2.setFirstName("Bob");
         customer2.setLastName("Smith");
 
@@ -74,16 +73,41 @@ public class CustomerControllerTest {
     @Test
     public void getCustomerById() throws Exception {
         CustomerDTO customer = new CustomerDTO();
-        customer.setId(1L);
+        //customer.setId(1L);
         customer.setFirstName(FIRST_NAME);
         customer.setLastName(LAST_NAME);
+        customer.setCustomerUrl("/api/v1/customer/1");
 
         when(customerService.getCustomerById(anyLong())).thenReturn(customer);
 
         mockMvc.perform(get("/api/v1/customers/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(1)));
+                .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)));
+   //             .andExpect(jsonPath("$.id", equalTo(1)));
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception {
+        //given
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFirstName("Fred");
+        customer.setLastName("Flintstone");
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstName(customer.getFirstName());
+        returnDTO.setLastName(customer.getLastName());
+        returnDTO.setCustomerUrl("/api/v1/customers/1");
+
+        when(customerService.createNewCustomer(customer)).thenReturn(returnDTO);
+
+        //when/then
+        mockMvc.perform(post("/api/v1/customers/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customer)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstname", equalTo("Fred")))
+                .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
     }
 
 }

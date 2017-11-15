@@ -1,6 +1,5 @@
-package com.angello.mapper;
+package com.angello.api.v1.mapper;
 
-import com.angello.api.v1.mapper.CategoryMapper;
 import com.angello.api.v1.model.CategoryDTO;
 import com.angello.domain.Category;
 import org.junit.Test;
