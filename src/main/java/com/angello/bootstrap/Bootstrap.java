@@ -2,8 +2,10 @@ package com.angello.bootstrap;
 
 import com.angello.domain.Category;
 import com.angello.domain.Customer;
+import com.angello.domain.Vendor;
 import com.angello.repositories.CategoryRepository;
 import com.angello.repositories.CustomerRepository;
+import com.angello.repositories.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +17,12 @@ public class Bootstrap implements CommandLineRunner{
 
     private CategoryRepository categoryRepository;
     private CustomerRepository customerRepository;
+    private VendorRepository vendorRepository;
 
-    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
+    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository, VendorRepository vendorRepository) {
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
+        this.vendorRepository = vendorRepository;
     }
 
     @Override
@@ -26,6 +30,24 @@ public class Bootstrap implements CommandLineRunner{
 
         loadCategories();
         loadCustomers();
+        loadVendors();
+    }
+
+    private void loadVendors() {
+        Vendor vendor = new Vendor();
+        vendor.setName("Western Tasty Fruits Ltd.");
+
+        Vendor vendor1 = new Vendor();
+        vendor1.setName("Exotic Fruits Company");
+
+        Vendor vendor2 = new Vendor();
+        vendor2.setName("Home Fruits");
+
+        vendorRepository.save(vendor);
+        vendorRepository.save(vendor1);
+        vendorRepository.save(vendor2);
+
+        System.out.println("Data Loaded vendors = " + vendorRepository.count() );
     }
 
     private void loadCustomers() {
