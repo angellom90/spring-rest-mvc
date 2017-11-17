@@ -1,7 +1,9 @@
 package com.angello.controllers.v1;
 
 import com.angello.api.v1.model.CustomerDTO;
+import com.angello.controllers.RestResponseEntityExceptionHandler;
 import com.angello.services.CustomerService;
+import com.angello.services.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -43,7 +45,9 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
 
     }
 
@@ -167,5 +171,15 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(anyLong());
+    }
+
+    @Test
+    public void testNotFoundException() throws Exception {
+
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.BASE_URL + "/222")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
