@@ -1,7 +1,5 @@
 package com.angello.controllers.v1;
 
-import com.angello.api.v1.model.CategoryDTO;
-import com.angello.api.v1.model.CategoryListDTO;
 import com.angello.api.v1.model.CustomerDTO;
 import com.angello.api.v1.model.CustomerListDTO;
 import com.angello.services.CustomerService;
@@ -10,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
 
@@ -21,7 +19,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<CustomerListDTO> getAllCustomers(){
 
         return new ResponseEntity<CustomerListDTO>(
@@ -59,5 +57,42 @@ public class CustomerController {
         customerService.deleteCustomerById(id);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }*/
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerListDTO getListOfCustomers(){
+        return new CustomerListDTO(customerService.getAllCustomers());
+    }
+
+    @GetMapping({"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDTO getCustomerById(@PathVariable Long id){
+        return customerService.getCustomerById(id);
+    }
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO){
+        return customerService.createNewCustomer(customerDTO);
+    }
+
+    @PutMapping({"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return customerService.saveCustomerByDTO(id, customerDTO);
+    }
+
+    @PatchMapping({"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDTO patchCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return customerService.patchCustomer(id, customerDTO);
+    }
+
+    @DeleteMapping({"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCustomer(@PathVariable Long id){
+        customerService.deleteCustomerById(id);
     }
 }
