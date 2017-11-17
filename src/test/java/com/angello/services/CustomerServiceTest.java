@@ -3,6 +3,7 @@ package com.angello.services;
 import com.angello.api.v1.mapper.CustomerMapper;
 import com.angello.api.v1.model.CategoryDTO;
 import com.angello.api.v1.model.CustomerDTO;
+import com.angello.controllers.v1.CustomerController;
 import com.angello.domain.Category;
 import com.angello.domain.Customer;
 import com.angello.repositories.CustomerRepository;
@@ -100,7 +101,7 @@ public class CustomerServiceTest {
         //then
         assertEquals(customerDTO.getFirstName(), savedDto.getFirstName());
         assertEquals(customerDTO.getLastName(), savedDto.getLastName());
-        assertEquals("/api/v1/customer/1", savedDto.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL+"/1", savedDto.getCustomerUrl());
     }
 
     @Test
@@ -122,7 +123,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstName(), savedDto.getFirstName());
-        assertEquals("/api/v1/customer/1", savedDto.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL+"/1", savedDto.getCustomerUrl());
     }
 
     @Test
