@@ -5,9 +5,12 @@ import com.angello.api.v1.model.CustomerListDTO;
 import com.angello.api.v1.model.VendorDTO;
 import com.angello.api.v1.model.VendorListDTO;
 import com.angello.services.VendorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@Api(description = "Vendor API")
 @RestController
 @RequestMapping(VendorController.BASE_URL)
 public class VendorController {
@@ -20,6 +23,7 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
+    @ApiOperation(value = "This will get a list of vendors.", notes = "Complete list of Vendors.")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public VendorListDTO getAllVendors(){
